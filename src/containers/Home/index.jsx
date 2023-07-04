@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import api from '../../services/api'
 import { Background } from './styles'
@@ -6,23 +6,32 @@ import { Background } from './styles'
 function Home() {
   const [movie, setMovie] = useState() // useState que coloca as informacoes na tela
 
-  async function getMovies() {
-    // precisa por o async, quando a funcao vai acessar algum dado em outro servidor, isso demora , entao eh necessario
-    const data = await api.get('/movie/popular')
+  useEffect(() => {
+    async function getMovies() {
+      // precisa por o async, quando a funcao vai acessar algum dado em outro servidor, isso demora , entao eh necessario
+      const {
+        data: { results }
+      } = await api.get('/movie/popular') // estou desestruturando e pegando so o results
 
-    setMovie(data.data.results[1])
+      setMovie(results[3])
+    }
 
-    console.log(movie)
-  }
-
-  getMovies()
+    getMovies()
+  }, []) // dentro do [] eh a condicao para chamar essa funcao  --> ele vazio, so vai chamar quando iniciar a tela
 
   /* estou enviando o que quero aqui, e meus props estao recebendo la no styles */
+  /* o codigo so funciona, quando o movie && todo o resto, for true/verdadeiro --> funciona como um If */
   return (
-    <Background img="https://image.tmdb.org/t/p/original/4XM8DUTQb3lhLemJC51Jx4a2EuA.jpg">
-      <h1>{movie.tittle}</h1>
-      <p>Essa eh a home</p>
-    </Background>
+    <>
+      {movie && (
+        <Background
+          img={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+        >
+          <h1>{movie.title}</h1>
+          <p>{movie.overview}</p>
+        </Background>
+      )}
+    </>
   )
 }
 
