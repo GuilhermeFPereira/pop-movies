@@ -21,3 +21,38 @@ export const Background = styled.div`
     // esse 0.5 eh a opacidade da cor, o ultimo parametro escolhe a opacidade
   }
 `
+
+export const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  max-width: 1500px;
+`
+
+export const Info = styled.div`
+  z-index: 2;
+  padding: 20px;
+  width: 50%;
+
+  h1 {
+    font-size: 5rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+`
+export const Poster = styled.div`
+  z-index: 2;
+  img {
+    width: 400px;
+    border-radius: 30px;
+  }
+`
