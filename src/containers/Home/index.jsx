@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 
 import Button from '../../components/Button'
+import Slider from '../../components/Slider'
 import api from '../../services/api'
+import { getImages } from '../../utils/getImages'
 import { Background, Info, Poster, Container, ContainerButtons } from './styles'
 
 function Home() {
   const [movie, setMovie] = useState() // useState que coloca as informacoes na tela
+  const [topMovies, setTopMovies] = useState()
 
   useEffect(() => {
     async function getMovies() {
@@ -14,9 +17,19 @@ function Home() {
         data: { results }
       } = await api.get('/movie/popular') // estou desestruturando e pegando so o results
 
-      setMovie(results[1])
+      setMovie(results[3])
     }
 
+    async function getTopMovies() {
+      const {
+        data: { results }
+      } = await api.get('/movie/top_rated')
+
+      console.log(results)
+      setTopMovies(results)
+    }
+
+    getTopMovies()
     getMovies()
   }, []) // dentro do [] eh a condicao para chamar essa funcao  --> ele vazio, so vai chamar quando iniciar a tela
 
@@ -25,9 +38,7 @@ function Home() {
   return (
     <>
       {movie && (
-        <Background
-          img={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-        >
+        <Background img={getImages(movie.backdrop_path)}>
           <Container>
             <Info>
               <h1>{movie.title}</h1>
@@ -38,14 +49,12 @@ function Home() {
               </ContainerButtons>
             </Info>
             <Poster>
-              <img
-                alt="Capa-do-Filme"
-                src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-              />
+              <img alt="Capa-do-Filme" src={getImages(movie.poster_path)} />
             </Poster>
           </Container>
         </Background>
       )}
+      {topMovies && <Slider info={topMovies} title={'Top Filmes'} />}
     </>
   )
 }
