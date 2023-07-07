@@ -9,6 +9,7 @@ import { Background, Info, Poster, Container, ContainerButtons } from './styles'
 function Home() {
   const [movie, setMovie] = useState() // useState que coloca as informacoes na tela
   const [topMovies, setTopMovies] = useState()
+  const [topSeries, setTopSeries] = useState()
 
   useEffect(() => {
     async function getMovies() {
@@ -17,7 +18,7 @@ function Home() {
         data: { results }
       } = await api.get('/movie/popular') // estou desestruturando e pegando so o results
 
-      setMovie(results[3])
+      setMovie(results[0])
     }
 
     async function getTopMovies() {
@@ -29,6 +30,16 @@ function Home() {
       setTopMovies(results)
     }
 
+    async function getTopSeries() {
+      const {
+        data: { results }
+      } = await api.get('/tv/top_rated')
+
+      console.log(results)
+      setTopSeries(results)
+    }
+
+    getTopSeries()
     getTopMovies()
     getMovies()
   }, []) // dentro do [] eh a condicao para chamar essa funcao  --> ele vazio, so vai chamar quando iniciar a tela
@@ -55,6 +66,7 @@ function Home() {
         </Background>
       )}
       {topMovies && <Slider info={topMovies} title={'Top Filmes'} />}
+      {topSeries && <Slider info={topSeries} title={'Top Series'} />}
     </>
   )
 }
