@@ -10,6 +10,8 @@ function Home() {
   const [movie, setMovie] = useState() // useState que coloca as informacoes na tela
   const [topMovies, setTopMovies] = useState()
   const [topSeries, setTopSeries] = useState()
+  const [popularSeries, setPopularSeries] = useState()
+  const [topPeople, setTopPeople] = useState()
 
   useEffect(() => {
     async function getMovies() {
@@ -18,7 +20,7 @@ function Home() {
         data: { results }
       } = await api.get('/movie/popular') // estou desestruturando e pegando so o results
 
-      setMovie(results[0])
+      setMovie(results[4])
     }
 
     async function getTopMovies() {
@@ -39,9 +41,29 @@ function Home() {
       setTopSeries(results)
     }
 
+    async function getPopularSeries() {
+      const {
+        data: { results }
+      } = await api.get('/tv/popular')
+
+      console.log(results)
+      setPopularSeries(results)
+    }
+
+    async function getTopPeople() {
+      const {
+        data: { results }
+      } = await api.get('/person/popular')
+
+      console.log(results)
+      setTopPeople(results)
+    }
+
     getTopSeries()
     getTopMovies()
     getMovies()
+    getPopularSeries()
+    getTopPeople()
   }, []) // dentro do [] eh a condicao para chamar essa funcao  --> ele vazio, so vai chamar quando iniciar a tela
 
   /* estou enviando o que quero aqui, e meus props estao recebendo la no styles */
@@ -67,6 +89,12 @@ function Home() {
       )}
       {topMovies && <Slider info={topMovies} title={'Top Filmes'} />}
       {topSeries && <Slider info={topSeries} title={'Top Series'} />}
+      {popularSeries && (
+        <Slider info={popularSeries} title={'Series Populares'} />
+      )}
+      {topPeople && (
+        <Slider info={topPeople} title={'Pessoas mais populares'} />
+      )}
     </>
   )
 }

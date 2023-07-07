@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
 
-// import Header from '../components/Header'
+import Header from '../components/Header'
 
 function DefaultLayout() {
   return (
     <>
-      {/* <Header /* Todas as telas terao esse header em cima  */}
+      <Header /* Todas as telas terao esse header em cima  */ />
       <Outlet /* Serve Para encaixar o resto da tela embaixo do header */ />
     </>
   )
