@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 
 import Button from '../../components/Button'
+import Modal from '../../components/Modal'
 import Slider from '../../components/Slider'
 import api from '../../services/api'
 import { getImages } from '../../utils/getImages'
 import { Background, Info, Poster, Container, ContainerButtons } from './styles'
 
 function Home() {
+  const [showModal, setShowModal] = useState(false) // como ele comeca falso, ele nao vai comecar mostrando as coisas na tela
   const [movie, setMovie] = useState() // useState que coloca as informacoes na tela
   const [topMovies, setTopMovies] = useState()
   const [topSeries, setTopSeries] = useState()
@@ -20,7 +22,7 @@ function Home() {
         data: { results }
       } = await api.get('/movie/popular') // estou desestruturando e pegando so o results
 
-      setMovie(results[4])
+      setMovie(results[5])
     }
 
     async function getTopMovies() {
@@ -28,7 +30,6 @@ function Home() {
         data: { results }
       } = await api.get('/movie/top_rated')
 
-      console.log(results)
       setTopMovies(results)
     }
 
@@ -37,7 +38,6 @@ function Home() {
         data: { results }
       } = await api.get('/tv/top_rated')
 
-      console.log(results)
       setTopSeries(results)
     }
 
@@ -46,7 +46,6 @@ function Home() {
         data: { results }
       } = await api.get('/tv/popular')
 
-      console.log(results)
       setPopularSeries(results)
     }
 
@@ -55,7 +54,6 @@ function Home() {
         data: { results }
       } = await api.get('/person/popular')
 
-      console.log(results)
       setTopPeople(results)
     }
 
@@ -68,17 +66,24 @@ function Home() {
 
   /* estou enviando o que quero aqui, e meus props estao recebendo la no styles */
   /* o codigo so funciona, quando o movie && todo o resto, for true/verdadeiro --> funciona como um If */
+
+  // se o showModal for verdadeiro e o resto do modal tambem , ai sim mostra na tela
   return (
     <>
       {movie && (
         <Background img={getImages(movie.backdrop_path)}>
+          {showModal && (
+            <Modal movieId={movie.id} setShowModal={setShowModal} />
+          )}
           <Container>
             <Info>
               <h1>{movie.title}</h1>
               <p>{movie.overview}</p>
               <ContainerButtons>
-                <Button red={true}>Assista Agora</Button>
-                <Button red={false}>Assista o Trailer</Button>
+                <Button red>Assista Agora</Button>
+                <Button onClick={() => setShowModal(true)}>
+                  Assista o Trailer
+                </Button>
               </ContainerButtons>
             </Info>
             <Poster>
