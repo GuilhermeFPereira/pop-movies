@@ -24,12 +24,37 @@ function Home() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    // async function getAllData() {
+    //   setMovie(await getMovies())
+    //   setTopMovies(await getTopMovies())
+    //   setTopSeries(await getTopSeries())
+    //   setPopularSeries(await getPopularSeries())
+    //   setTopPeople(await getTopPeople())
+    //   console.timeEnd('time')
+    // }
+
+    // getAllData()
+
     async function getAllData() {
-      setMovie(await getMovies())
-      setTopMovies(await getTopMovies())
-      setTopSeries(await getTopSeries())
-      setPopularSeries(await getPopularSeries())
-      setTopPeople(await getTopPeople())
+      // fazer dessa maneira e fazer da maneira de cima , da na mesma , porem , usando promise.all , ele chama a API todas de uma vez , fazendo ficar super rapido
+      // nao precisa por o await, pq o promise ja faz isso
+
+      Promise.all([
+        getMovies(),
+        getTopMovies(),
+        getTopSeries(),
+        getPopularSeries(),
+        getTopPeople()
+      ])
+        .then(([movie, topMovies, topSeries, popularSeries, topPeople]) => {
+          // fez isso para chamar na ordem correta, cada nome aqui, eh a ordem que esta no array , ele usou [] para desestruturar , e deu um NOME para cada posicao do array, ele escolheu o nome
+          setMovie(movie)
+          setTopMovies(topMovies)
+          setTopSeries(topSeries)
+          setPopularSeries(popularSeries)
+          setTopPeople(topPeople)
+        })
+        .catch((error) => console.error(error))
     }
 
     getAllData()
