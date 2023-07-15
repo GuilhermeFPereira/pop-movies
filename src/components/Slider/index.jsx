@@ -6,7 +6,6 @@ import { Container } from './styles'
 function Slider({ info, title }) {
   // o children,tem esse nome obrigatorio, estou pegando o valor que esta sendo enviado la do home
 
-  console.log(info, title)
   return (
     <Container>
       <h2>{title}</h2>
